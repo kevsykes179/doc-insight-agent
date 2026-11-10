@@ -92,7 +92,10 @@ def show_assistant(msg: dict) -> None:
 
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
-        show_assistant(msg) if msg["role"] == "assistant" else st.markdown(msg["content"])
+        if msg["role"] == "assistant":
+            show_assistant(msg)
+        else:
+            st.markdown(msg["content"])
 
 clicked = None
 if not st.session_state.messages:

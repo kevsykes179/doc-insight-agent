@@ -222,12 +222,13 @@ The tool detects and reports these automatically (sidebar, `list_documents`, CLI
 
 ## Issues found in live testing
 
-The offline tests use a fake model, so the first runs against the real API surfaced three issues. Each is now fixed and covered by a test:
+The offline tests use a fake model, so the first runs against the real API, and hands-on use of the app, surfaced four issues. All are fixed, and the three model-related ones are covered by automated tests:
 
 | Issue | Symptom | Fix |
 |---|---|---|
 | Newer Claude models reject a *forced* tool choice | Routing failed with an API error. The keyword fallback router took over, so the user still got a correct answer. | Routing instructs the model to call a tool via the prompt; structured data uses the API's structured-outputs feature. |
 | Replies cut off by the token limit | The executive summary stopped after 15 words. Newer models can spend part of the token allowance on internal reasoning. | The code checks `stop_reason` and retries with a higher limit, rather than silently returning half an answer. |
+| Stray output in the web app | After each new question, the previous answer expanded into Streamlit's internal help text. A one-line `x if y else z` statement triggered Streamlit's "magic" auto-display. | Rewritten as a normal if/else, and magic turned off in `.streamlit/config.toml` so stray values can never be displayed. Found by manual testing, not by the automated tests: a reminder that UI needs hands-on testing too. |
 | Model-invented page numbers | One web page was cited as "p.3", but web pages have no pages. | Page numbers are removed in code for non-PDF sources, so the prompt doesn't have to be trusted. |
 
 The lesson I drew from this: don't trust the model with anything the code can check itself.

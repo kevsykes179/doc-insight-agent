@@ -1,0 +1,7 @@
+# Turn off Streamlit "magic", which displays the value of any bare expression on the page.
+# Everything this app shows is written explicitly, so magic only risks stray output.
+[runner]
+magicEnabled = false
+
+[browser]
+gatherUsageStats = false
